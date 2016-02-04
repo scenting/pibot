@@ -98,7 +98,9 @@ class PiBot:
 
         for row in output.split('\n'):
             # We don't want to send the torrent name
-            self.send_message(message, ' '.join(row.split('   ')[:-2]))
+            msg = ' '.join(row.split('   ')[:-2])
+            if msg:
+                self.send_message(message, msg)
 
     def send_temp(self, message):
         # output = subprocess.check_output(
