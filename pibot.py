@@ -79,24 +79,26 @@ class PiBot:
     def torrent_start(self, message):
         self.send_message(message, 'Starting torrents!')
         output = subprocess.check_output(
-            self.build_transmission_base_command + ['-t', 'all', '--start']
+            self.build_transmission_base_command() + ['-t', 'all', '--start']
         )
         self.send_message(message, output)
 
     def torrent_stop(self, message):
         self.send_message(message, 'Stopping torrents!')
         output = subprocess.check_output(
-            self.build_transmission_base_command + ['-t', 'all', '--stop']
+            self.build_transmission_base_command() + ['-t', 'all', '--stop']
         )
         self.send_message(message, output)
 
     def torrent_status(self, message):
         self.send_message(message, 'Checking torrents!')
         output = subprocess.check_output(
-            self.build_transmission_base_command + ['-l']
+            self.build_transmission_base_command() + ['-l']
         )
-        output = [t.split(' ') for t in output.split('\n')][-2]
-        self.send_message(message, output)
+
+        for row in output.split('\n'):
+            # We don't want to send the torrent name
+            self.send_message(message, ' '.join(row.split('   ')[:-2]))
 
     def send_temp(self, message):
         # output = subprocess.check_output(
